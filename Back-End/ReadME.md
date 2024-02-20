@@ -1,7 +1,3 @@
-Certainly! Below is the specified routes section added to your README.md file:
-
----
-
 # InterviewIQ Backend
 
 This repository contains the backend code for the InterviewIQ application.
@@ -113,5 +109,3 @@ InterviewIQ/backend
 - Amit Kumar Murmu
 
 ---
-
-Feel free to adjust the content and structure to better suit your project's needs.

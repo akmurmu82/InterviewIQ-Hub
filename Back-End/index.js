@@ -3,12 +3,14 @@ const cors = require("cors");
 require("dotenv").config();
 const connection = require("./db");
 const guestRouter = require("./routes/guestRouter");
+const adminRoute = require("./routes/adminRoute");
 
 const port = process.env.PORT;
 
 const app = express();
 app.use(express.json());
 app.use("/guests", guestRouter);
+app.use("/admin", adminRoute);
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the server" });

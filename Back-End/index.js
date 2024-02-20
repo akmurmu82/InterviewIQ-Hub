@@ -8,6 +8,7 @@ const adminRoute = require("./routes/adminRoute");
 const port = process.env.PORT;
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use("/guests", guestRouter);
 app.use("/admin", adminRoute);
@@ -15,7 +16,6 @@ app.use("/admin", adminRoute);
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the server" });
 });
-app.use(cors());
 
 app.listen(port, async () => {
   try {

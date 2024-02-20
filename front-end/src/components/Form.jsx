@@ -15,13 +15,12 @@ import {
   Radio,
   Stack,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useContext, useReducer, useEffect } from 'react';
 import { AllDetails } from '../Context/AllDetailsContextProvider';
 
-const GUEST_REGISTER_API= "https://be-interviewiq-hub.onrender.com/guests/register"
-const GUEST_LOGIN_API= "https://be-interviewiq-hub.onrender.com/guests/login"
-
-const FETCH_GUESTS= "https://be-interviewiq-hub.onrender.com/admin/guests"
+const GUEST_REGISTER_API =
+  'https://be-interviewiq-hub.onrender.com/guests/register';
 
 let initialState = {
   firstName: '',
@@ -77,7 +76,8 @@ function reducer(state, { type, payload }) {
 }
 
 function Form() {
-  const { setIsTrue, setUserSkills, userSkills } = useContext(AllDetails);
+  const { setIsTrue, setUserSkills } = useContext(AllDetails);
+  const navigate = useNavigate();
 
   const [formData, dispatch] = useReducer(reducer, initialState);
 
@@ -116,13 +116,14 @@ function Form() {
     dispatch({ type: 'set_skills', payload: selectedSkills });
   };
 
-  const handleSubmit = () => {
-    // e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (selectedSkills.length >= 2 && value !== '0') {
       // Proceed with form submission or other action
       setUserSkills(selectedSkills);
 
       setIsTrue(true);
+      navigate('/assessment');
     } else {
       setIsOpen(true);
     }

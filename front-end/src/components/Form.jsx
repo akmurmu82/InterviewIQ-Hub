@@ -18,7 +18,10 @@ import {
 import React, { useState, useContext, useReducer, useEffect } from 'react';
 import { AllDetails } from '../Context/AllDetailsContextProvider';
 
-//https://be-interviewiq-hub.onrender.com
+const GUEST_REGISTER_API= "https://be-interviewiq-hub.onrender.com/guests/register"
+const GUEST_LOGIN_API= "https://be-interviewiq-hub.onrender.com/guests/login"
+
+const FETCH_GUESTS= "https://be-interviewiq-hub.onrender.com/admin/guests"
 
 let initialState = {
   firstName: '',
@@ -82,30 +85,35 @@ function Form() {
   const [isOpen, setIsOpen] = useState(false);
 
   const [value, setValue] = useState('0');
-  const API_URL = 'https://be-interviewiq-hub.onrender.com/guests/register';
 
   async function userRegister() {
     try {
-      const fetchTheData = await fetch(API_URL, {
+      const fetchTheData = await fetch(GUEST_REGISTER_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
       const getThemsg = await fetchTheData.json();
-      console.log('no-error', getThemsg);
+      console.log(getThemsg);
     } catch (error) {
       // throw new error();
       console.log('error', error);
     }
   }
 
+  useEffect(() => {
+    // Update techStack in formData whenever selectedSkills changes
+    dispatch({ type: 'set_skills', payload: selectedSkills });
+  }, [selectedSkills]);
+
   const handleCheckboxChange = skill => {
     if (selectedSkills.includes(skill)) {
       setSelectedSkills(selectedSkills.filter(s => s !== skill));
     } else {
       setSelectedSkills([...selectedSkills, skill]);
-      // dispatch({ type: 'set_skills', payload: [...formData.techStack, skill] });
     }
+    // Update the techStack in the form state
+    dispatch({ type: 'set_skills', payload: selectedSkills });
   };
 
   const handleSubmit = () => {
@@ -129,11 +137,6 @@ function Form() {
   const handleClose = () => {
     setIsOpen(false);
   };
-
-  // console.log('formData-outSide', formData);
-  // useEffect(() => {
-
-  // }, []);
 
   return (
     <Box width={{ base: '90%', md: '80%' }} margin="20px auto">

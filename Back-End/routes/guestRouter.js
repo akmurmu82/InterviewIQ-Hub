@@ -27,7 +27,7 @@ guestRouter.post("/register", async (req, res) => {
       await newGuest.save();
 
       // Respond with a success message
-      res.status(201).json({ message: "New user has been created" });
+      res.status(201).json({ message: "New guest has applied for Assessment" });
     });
   } catch (error) {
     // Handle any errors

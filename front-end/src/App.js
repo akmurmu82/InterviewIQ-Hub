@@ -1,39 +1,35 @@
-import React from 'react';
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from '@chakra-ui/react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { Logo } from './Logo';
+import React, { useContext } from 'react';
+import { ChakraProvider, Box, theme } from '@chakra-ui/react';
+import Banner from './components/Banner';
+import Description from './components/Description';
+import Form from './components/Form';
+import { AllDetails } from './Context/AllDetailsContextProvider';
+import Assesment from './components/Assesment';
+// import AllRoutes from './Routes/AllRoutes';
 
 function App() {
+  const { isTrue } = useContext(AllDetails);
+
   return (
     <ChakraProvider theme={theme}>
-      <Box textAlign="center" fontSize="xl">
-        <Grid minH="100vh" p={3}>
-          <ColorModeSwitcher justifySelf="flex-end" />
-          <VStack spacing={8}>
-            <Logo h="40vmin" pointerEvents="none" />
-            <Text>
-              Edit <Code fontSize="xl">src/App.js</Code> and save to reload.
-            </Text>
-            <Link
-              color="teal.500"
-              href="https://chakra-ui.com"
-              fontSize="2xl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn Chakra
-            </Link>
-          </VStack>
-        </Grid>
+      <Box
+        textAlign="center"
+        margin="10px auto"
+        boxShadow="md"
+        pb={5}
+        width={{ base: '90%', sm: '80%', md: '50%' }}
+      >
+        {isTrue ? (
+          <Assesment />
+        ) : (
+          <>
+            <Banner />
+            <Description />
+            <Form />
+          </>
+        )}
+
+        {/* <AllRoutes /> */}
       </Box>
     </ChakraProvider>
   );

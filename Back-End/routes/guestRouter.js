@@ -17,7 +17,6 @@ guestRouter.post("/register", async (req, res) => {
     // Create a new guest instance
     const newGuest = new GuestModel({
       name,
-      password: hashedPassword,
       email,
       phoneNo,
       techStack,

@@ -9,17 +9,13 @@ const port = process.env.PORT;
 
 const app = express();
 app.use(express.json());
+app.use(cors())
 app.use("/guests", guestRouter);
 app.use("/admin", adminRoute);
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the server" });
 });
-app.use(
-  cors({
-    origin: "*",
-  })
-);
 
 app.listen(port, async () => {
   try {

@@ -12,22 +12,23 @@ guestRouter.post("/register", async (req, res) => {
 
   try {
     // Hash the password
-    const hashedPassword = await hashPassword(password);
+    bcrypt.hash(password, 5, async function (err, hash) {
+      // Create a new guest instance
+      const newGuest = new GuestModel({
+        name,
+        email,
+        phoneNo,
+        password: hash, // Store the hashed password
+        techStack,
+        englishFluency,
+      });
 
-    // Create a new guest instance
-    const newGuest = new GuestModel({
-      name,
-      email,
-      phoneNo,
-      techStack,
-      englishFluency,
+      // Save the new guest to the database
+      await newGuest.save();
+
+      // Respond with a success message
+      res.status(201).json({ message: "New user has been created" });
     });
-
-    // Save the new guest to the database
-    await newGuest.save();
-
-    // Respond with a success message
-    res.status(201).json({ message: "New user has been created" });
   } catch (error) {
     // Handle any errors
     res.status(500).json({ message: error.message });
@@ -48,7 +49,6 @@ guestRouter.post("/login", async (req, res) => {
   try {
     // Find the user by email
     const guestDb = await GuestModel.findOne({ email });
-    console.log(guestDb);
 
     // If no user is found, respond with a 404 status
     if (!guestDb) {
@@ -65,7 +65,7 @@ guestRouter.post("/login", async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ message: error });
+    res.status(500).json({ message: error.message });
   }
 });
 

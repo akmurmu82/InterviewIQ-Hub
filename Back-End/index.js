@@ -15,11 +15,7 @@ app.use("/admin", adminRoute);
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the server" });
 });
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+app.use(cors());
 
 app.listen(port, async () => {
   try {

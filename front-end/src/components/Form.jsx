@@ -127,7 +127,7 @@ function Form() {
     } else {
       setIsOpen(true);
     }
-    userRegister();
+    // userRegister();
   };
 
   const handleFluencyChange = newValue => {

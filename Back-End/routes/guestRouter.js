@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const GuestModel = require("../models/guestModel");
+const QuestionModel = require("../models/questionModel");
 
 const guestRouter = express.Router();
 
@@ -64,6 +65,16 @@ guestRouter.post("/login", async (req, res) => {
         res.status(401).json({ message: "Wrong credentials" });
       }
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Assessment route
+guestRouter.get("/assessment", async (req, res) => {
+  try {
+    const assessmentQuesArr = await QuestionModel.find();
+    res.status(200).json({ data: assessmentQuesArr });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

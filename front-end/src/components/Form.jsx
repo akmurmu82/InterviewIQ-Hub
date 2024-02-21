@@ -116,18 +116,17 @@ function Form() {
     dispatch({ type: 'set_skills', payload: selectedSkills });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     if (selectedSkills.length >= 2 && value !== '0') {
       // Proceed with form submission or other action
       setUserSkills(selectedSkills);
-
       setIsTrue(true);
+      userRegister();
       navigate('/assessment');
     } else {
       setIsOpen(true);
     }
-    // userRegister();
   };
 
   const handleFluencyChange = newValue => {

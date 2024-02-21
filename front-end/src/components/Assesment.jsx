@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import questions from './questions';
+import React, { useContext, useEffect, useState } from 'react';
+// import questions from './questions';
 import { AllDetails } from '../Context/AllDetailsContextProvider';
 import Banner from './Banner';
 
@@ -9,21 +9,24 @@ import MCQ from './MCQ';
 function Assesment() {
   const { userSkills } = useContext(AllDetails);
 
+  const [questions, setQuestions] = useState([]);
+
   const handleSubmitAssesment = () => {};
 
   // Fetching the assessment questions from DB
   const getAssessmentQues = async () => {
-    let res = await fetch(`http://localhost:8080/guests/assessment`);
+    let res = await fetch(
+      `https://be-interviewiq-hub.onrender.com/guests/assessment`
+    );
     let data = await res.json();
-    return data.data;
+    setQuestions(data.data);
+    // return data.data;
   };
 
   //filtering the Questions according to users skills
 
   function filterQuestionsBySkills(skills, numQuestions) {
     try {
-      // const assessmentQuesArr = await getAssessmentQues();
-      // console.log('assessmentQuesArr: ', assessmentQuesArr);
       const filtered = questions.filter(ques =>
         skills.some(skill => ques.skills.includes(skill))
       );
@@ -45,6 +48,10 @@ function Assesment() {
 
   console.log('filtered que', getFilterSkills);
   console.log('filtered que', userSkills);
+
+  useEffect(() => {
+    getAssessmentQues();
+  }, []);
 
   return (
     <Box>

@@ -8,6 +8,14 @@ const guestSchema = mongoose.Schema({
   techStack: { type: Array, require: true },
 });
 
+const questionSchema = mongoose.Schema({
+  id: { type: Number, require: true },
+  question: { type: String, require: true },
+  options: { type: Array, require: true },
+  answer: { type: String, require: true },
+  skills: { type: Array, require: true },
+});
+
 const GuestModel = mongoose.model("guest", guestSchema);
 
 module.exports = GuestModel;

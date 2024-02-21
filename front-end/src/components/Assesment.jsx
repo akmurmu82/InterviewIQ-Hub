@@ -11,20 +11,33 @@ function Assesment() {
 
   const handleSubmitAssesment = () => {};
 
+  // Fetching the assessment questions from DB
+  const getAssessmentQues = async () => {
+    let res = await fetch(`http://localhost:8080/guests/assessment`);
+    let data = await res.json();
+    return data.data;
+  };
+
   //filtering the Questions according to users skills
 
   function filterQuestionsBySkills(skills, numQuestions) {
-    const filtered = questions.filter(ques =>
-      skills.some(skill => ques.skills.includes(skill))
-    );
+    try {
+      // const assessmentQuesArr = await getAssessmentQues();
+      // console.log('assessmentQuesArr: ', assessmentQuesArr);
+      const filtered = questions.filter(ques =>
+        skills.some(skill => ques.skills.includes(skill))
+      );
 
-    // Shuffle the filtered array using the Fisher-Yates shuffle algorithm
-    for (let i = filtered.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
+      // Shuffle the filtered array using the Fisher-Yates shuffle algorithm
+      for (let i = filtered.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
+      }
+      console.log('filtered: ', filtered);
+      return filtered.slice(0, numQuestions);
+    } catch (error) {
+      console.log('Error: ', error);
     }
-
-    return filtered.slice(0, numQuestions);
   }
 
   let numQuestions = 5;

@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Box, Text, Stack, Radio, Button } from '@chakra-ui/react';
-import { AllDetails } from '../Context/AllDetailsContextProvider';
 
 function MCQ({ index, question, options, answer }) {
   const [selectedOption, setSelectedOption] = useState('');

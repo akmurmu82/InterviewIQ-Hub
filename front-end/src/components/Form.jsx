@@ -31,6 +31,14 @@ let initialState = {
   englishFluency: 0,
 };
 
+let adminEmail = 'admin@dashboard.panel';
+
+let adminState = {
+  firstName: 'Admin',
+  lastName: 'Dashboard',
+  email: adminEmail,
+};
+
 function reducer(state, { type, payload }) {
   switch (type) {
     case 'firstName': {
@@ -76,7 +84,8 @@ function reducer(state, { type, payload }) {
 }
 
 function Form() {
-  const { setIsTrue, setUserSkills } = useContext(AllDetails);
+  const { setIsTrue, setUserSkills, isAdmin, setIsAdmin } =
+    useContext(AllDetails);
   const navigate = useNavigate();
 
   const [formData, dispatch] = useReducer(reducer, initialState);
@@ -104,7 +113,21 @@ function Form() {
   useEffect(() => {
     // Update techStack in formData whenever selectedSkills changes
     dispatch({ type: 'set_skills', payload: selectedSkills });
-  }, [selectedSkills]);
+
+    if (
+      formData.email === adminState.email &&
+      formData.firstName === adminState.firstName &&
+      formData.lastName === adminState.lastName
+    ) {
+      setIsAdmin(true);
+    }
+  }, [
+    selectedSkills,
+    formData.email,
+    formData.firstName,
+    formData.lastName,
+    setIsAdmin,
+  ]);
 
   const handleCheckboxChange = skill => {
     if (selectedSkills.includes(skill)) {
@@ -119,11 +142,15 @@ function Form() {
   const handleSubmit = e => {
     e.preventDefault();
     if (selectedSkills.length >= 2 && value !== '0') {
-      // Proceed with form submission or other action
-      setUserSkills(selectedSkills);
-      setIsTrue(true);
-      userRegister();
-      navigate('/assessment');
+      if (isAdmin) {
+        navigate('/admin');
+      } else {
+        // Proceed with form submission or other action
+        setUserSkills(selectedSkills);
+        setIsTrue(true);
+        userRegister();
+        navigate('/assessment');
+      }
     } else {
       setIsOpen(true);
     }
@@ -267,7 +294,7 @@ function Form() {
           onClick={handleSubmit}
           disabled={selectedSkills.length < 2 || value === '0'}
         >
-          Submit & Start Assesment
+          {isAdmin ? 'Welcome Admin' : 'Submit & Start Assessment'}
         </Button>
       </form>
       <AlertDialog isOpen={isOpen} onClose={handleClose}>

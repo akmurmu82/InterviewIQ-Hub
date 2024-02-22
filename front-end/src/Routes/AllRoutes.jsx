@@ -5,6 +5,7 @@ import Description from '../components/Description';
 import Form from '../components/Form';
 import Assesment from '../components/Assesment';
 import ThankYou from '../components/ThankYou';
+import AdminDashboard from '../components/AdminDashboard';
 
 function AllRoutes() {
   return (
@@ -21,6 +22,7 @@ function AllRoutes() {
       />
       <Route path="/assessment" element={<Assesment />} />
       <Route path="/thankyou" element={<ThankYou />} />
+      <Route path="/admin" element={<AdminDashboard />} />
     </Routes>
   );
 }

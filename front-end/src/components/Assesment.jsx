@@ -9,6 +9,7 @@ import Disclaimer from './Disclaimer';
 import { useNavigate } from 'react-router-dom';
 import Timer from './Timer';
 import WarningMsg from './WarningTabSwitching';
+import Loader from './Loader';
 
 function Assesment() {
   const redirectToEnding = useNavigate();
@@ -19,18 +20,28 @@ function Assesment() {
 
   const [active, setActive] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmitAssesment = () => {
     redirectToEnding('/thankyou');
   };
 
   // Fetching the assessment questions from DB
   const getAssessmentQues = async () => {
-    let res = await fetch(
-      `https://be-interviewiq-hub.onrender.com/guests/assessment`
-    );
-    let data = await res.json();
-    setQuestions(data.data);
-    // return data.data;
+    setIsLoading(true);
+
+    try {
+      let res = await fetch(
+        `https://be-interviewiq-hub.onrender.com/guests/assessment`
+      );
+      let data = await res.json();
+      setQuestions(data.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   //filtering the Questions according to users skills
@@ -81,15 +92,21 @@ function Assesment() {
       <Disclaimer />
       <Banner />
       {!active ? null : <WarningMsg setActive={setActive} />}
+
       <Text fontSize={30} fontWeight="bold" color="#af2b2b" m={'20px auto'}>
         Assessment Time <Timer handleSubmitAssesment={handleSubmitAssesment} />
       </Text>
       <hr />
-      <Box>
-        {getFilterSkills.map((que, i) => (
-          <MCQ {...que} key={que.id} index={i} marks={current} />
-        ))}
-      </Box>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Box>
+          {getFilterSkills.map((que, i) => (
+            <MCQ {...que} key={que.id} index={i} marks={current} />
+          ))}
+        </Box>
+      )}
+
       <hr />
       <Button margin={'20px auto '} onClick={handleSubmitAssesment}>
         Submit Assesment

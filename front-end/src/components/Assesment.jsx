@@ -5,13 +5,23 @@ import Banner from './Banner';
 
 import { Box, Button, Text } from '@chakra-ui/react';
 import MCQ from './MCQ';
+import Disclaimer from './Disclaimer';
+import { useNavigate } from 'react-router-dom';
+import Timer from './Timer';
+import WarningMsg from './WarningTabSwitching';
 
 function Assesment() {
-  const { userSkills } = useContext(AllDetails);
+  const redirectToEnding = useNavigate();
+
+  const { userSkills, current } = useContext(AllDetails);
 
   const [questions, setQuestions] = useState([]);
 
-  const handleSubmitAssesment = () => {};
+  const [active, setActive] = useState(false);
+
+  const handleSubmitAssesment = () => {
+    redirectToEnding('/thankyou');
+  };
 
   // Fetching the assessment questions from DB
   const getAssessmentQues = async () => {
@@ -36,7 +46,6 @@ function Assesment() {
         const j = Math.floor(Math.random() * (i + 1));
         [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
       }
-      console.log('filtered: ', filtered);
       return filtered.slice(0, numQuestions);
     } catch (error) {
       console.log('Error: ', error);
@@ -46,8 +55,22 @@ function Assesment() {
   let numQuestions = 5;
   const getFilterSkills = filterQuestionsBySkills(userSkills, numQuestions);
 
-  console.log('filtered que', getFilterSkills);
-  console.log('filtered que', userSkills);
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
+  // Event handler function
+  function handleVisibilityChange() {
+    if (document.visibilityState === 'visible') {
+      // Document is now visible (tab is active)
+      setActive(true);
+
+      // Resume any paused activities or notify the server
+    } else {
+      // Document is now hidden (tab is inactive)
+
+      setActive(false);
+      // Pause animations or take appropriate action
+    }
+  }
 
   useEffect(() => {
     getAssessmentQues();
@@ -55,14 +78,16 @@ function Assesment() {
 
   return (
     <Box>
+      <Disclaimer />
       <Banner />
-      <Text fontSize={30} fontWeight="bold">
-        Assesment
+      {!active ? null : <WarningMsg setActive={setActive} />}
+      <Text fontSize={30} fontWeight="bold" color="#af2b2b" m={'20px auto'}>
+        Assessment Time <Timer handleSubmitAssesment={handleSubmitAssesment} />
       </Text>
       <hr />
       <Box>
         {getFilterSkills.map((que, i) => (
-          <MCQ {...que} key={que.id} index={i} />
+          <MCQ {...que} key={que.id} index={i} marks={current} />
         ))}
       </Box>
       <hr />
@@ -74,6 +99,3 @@ function Assesment() {
 }
 
 export default Assesment;
-// component for creating a MCQ que with 4 options - create
-// this component should render with array method and in array lot's of ques with mcqs are presents
-// use filter process according to user skills

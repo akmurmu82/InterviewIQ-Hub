@@ -485,7 +485,7 @@ const questions = [
       'To pass data from parent to child components',
       'To pass data from child to parent components',
     ],
-    answer: 'By calling setState()',
+    answer: 'To pass data from parent to child components',
     skills: ['React (Basic)'],
   },
   {

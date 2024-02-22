@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Box, Text, Stack, Radio, Button } from '@chakra-ui/react';
+import { AllDetails } from '../Context/AllDetailsContextProvider';
 
 function MCQ({ index, question, options, answer }) {
   const [selectedOption, setSelectedOption] = useState('');
   const [isCorrect, setIsCorrect] = useState(false);
   const [isAnswered, setIsAnswered] = useState(false);
+
   const checkAnswerRef = useRef(null);
 
   const handleOptionChange = option => {
@@ -13,10 +15,8 @@ function MCQ({ index, question, options, answer }) {
 
   const handleSubmit = () => {
     setIsCorrect(selectedOption === answer);
-
-    if (selectedOption === answer) {
-      // mark- count ++
-    }
+    console.log('selectedOption:', selectedOption);
+    console.log('answer:', answer);
 
     setIsAnswered(true);
   };

@@ -1,20 +1,24 @@
 import { Box, Text } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 
-function Timer({ handleSubmitAssesment }) {
+function Timer({ handleSubmitAssesment, isLoading }) {
   const [minutes, setMinutes] = useState(4);
   const [seconds, setSeconds] = useState(59);
 
-  useEffect(() => {
-    const secondsInterval = setInterval(() => {
-      if (seconds === 0) {
-        setSeconds(59);
+  let secondsInterval;
 
-        setMinutes(prevMinutes => prevMinutes - 1);
-      } else {
-        setSeconds(prevSeconds => prevSeconds - 1);
-      }
-    }, 1000);
+  useEffect(() => {
+    if (!isLoading) {
+      secondsInterval = setInterval(() => {
+        if (seconds === 0) {
+          setSeconds(59);
+
+          setMinutes(prevMinutes => prevMinutes - 1);
+        } else {
+          setSeconds(prevSeconds => prevSeconds - 1);
+        }
+      }, 1000);
+    }
 
     return () => {
       clearInterval(secondsInterval);

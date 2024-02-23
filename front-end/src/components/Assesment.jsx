@@ -94,7 +94,11 @@ function Assesment() {
       {!active ? null : <WarningMsg setActive={setActive} />}
 
       <Text fontSize={30} fontWeight="bold" color="#af2b2b" m={'20px auto'}>
-        Assessment Time <Timer handleSubmitAssesment={handleSubmitAssesment} />
+        Assessment Time{' '}
+        <Timer
+          handleSubmitAssesment={handleSubmitAssesment}
+          isLoading={isLoading}
+        />
       </Text>
       <hr />
       {isLoading ? (
@@ -108,7 +112,11 @@ function Assesment() {
       )}
 
       <hr />
-      <Button margin={'20px auto '} onClick={handleSubmitAssesment}>
+      <Button
+        margin={'20px auto '}
+        disabled={isLoading}
+        onClick={handleSubmitAssesment}
+      >
         Submit Assesment
       </Button>
     </Box>

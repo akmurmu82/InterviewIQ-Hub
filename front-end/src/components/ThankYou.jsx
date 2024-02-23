@@ -8,10 +8,10 @@ function ThankYou() {
       <Banner />
       <Text
         color={'#118'}
-        fontSize={26}
+        fontSize={{ base: 16, sm: 18, md: 26 }}
         m={'auto'}
         mt={10}
-        p={3}
+        p={{ base: 1, md: 3 }}
         fontWeight={600}
         border={'2px dashed #e37272'}
         borderRadius={10}

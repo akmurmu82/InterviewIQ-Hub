@@ -1,8 +1,42 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Banner from './Banner';
+import useTotalMarks from './helper/setTotalMarks';
+import { AllDetails } from '../Context/AllDetailsContextProvider';
+import { useContext } from 'react';
 
 function ThankYou() {
+  const { marksRef } = useTotalMarks();
+
+  const { emailRef } = useContext(AllDetails);
+
+  useEffect(() => {
+    const bodyData = {
+      email: emailRef.current,
+      score: marksRef.current,
+    };
+
+    console.log('bodyData: ', bodyData);
+
+    const fetchTheData = async () => {
+      try {
+        const res = await fetch(
+          'https://be-interviewiq-hub.onrender.com/guests/assessment/update',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(bodyData),
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTheData();
+  }, [emailRef, marksRef]);
+
   return (
     <Box textAlign={'center'}>
       <Banner />
@@ -18,6 +52,33 @@ function ThankYou() {
         width={'max-content'}
       >
         Thank You for your Interest!💫
+      </Text>
+      <Text
+        color={'#118'}
+        fontSize={{ base: 16, sm: 18, md: 26 }}
+        m={'auto'}
+        mt={10}
+        p={{ base: 1, md: 3 }}
+        fontWeight={600}
+        border={'2px dashed #e37272'}
+        borderRadius={10}
+        width={'max-content'}
+      >
+        Your Marks:{' '}
+        <Text
+          display={'inline'}
+          color={
+            marksRef.current > 3
+              ? 'teal'
+              : marksRef.current === 3
+              ? 'orange'
+              : 'red'
+          }
+          fontWeight={700}
+        >
+          {' '}
+          {marksRef.current} out of 5
+        </Text>
       </Text>
       <Text
         color={'#457'}

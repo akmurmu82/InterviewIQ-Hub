@@ -18,6 +18,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useContext, useReducer, useEffect } from 'react';
 import { AllDetails } from '../Context/AllDetailsContextProvider';
+import useTotalMarks from './helper/setTotalMarks';
 
 const GUEST_REGISTER_API =
   'https://be-interviewiq-hub.onrender.com/guests/register';
@@ -29,6 +30,7 @@ let initialState = {
   phoneNo: '',
   techStack: [],
   englishFluency: 0,
+  marks: 0,
 };
 
 let adminEmail = 'admin@dashboard.panel';
@@ -77,6 +79,12 @@ function reducer(state, { type, payload }) {
         englishFluency: payload,
       };
     }
+    case 'set_marks': {
+      return {
+        ...state,
+        marks: payload,
+      };
+    }
     default: {
       throw new Error('Invalid');
     }
@@ -84,7 +92,7 @@ function reducer(state, { type, payload }) {
 }
 
 function Form() {
-  const { setIsTrue, setUserSkills, isAdmin, setIsAdmin } =
+  const { setIsTrue, setUserSkills, isAdmin, setIsAdmin, emailRef } =
     useContext(AllDetails);
   const navigate = useNavigate();
 
@@ -95,17 +103,25 @@ function Form() {
 
   const [value, setValue] = useState('0');
 
+  const [errors, setErrors] = useState({
+    email: '',
+    phoneNo: '',
+  });
+  const { marksRef } = useTotalMarks();
+
   async function userRegister() {
     try {
+      const name = `${formData.firstName} ${formData.lastName}`;
+      const bodyData = {
+        name,
+        ...formData,
+      };
       const fetchTheData = await fetch(GUEST_REGISTER_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(bodyData),
       });
-      const getThemsg = await fetchTheData.json();
-      console.log(getThemsg);
     } catch (error) {
-      // throw new error();
       console.log('error', error);
     }
   }
@@ -113,6 +129,8 @@ function Form() {
   useEffect(() => {
     // Update techStack in formData whenever selectedSkills changes
     dispatch({ type: 'set_skills', payload: selectedSkills });
+    dispatch({ type: 'set_marks', payload: marksRef.current });
+    emailRef.current = formData.email;
 
     if (
       formData.email === adminState.email &&
@@ -127,6 +145,7 @@ function Form() {
     formData.firstName,
     formData.lastName,
     setIsAdmin,
+    marksRef.current,
   ]);
 
   const handleCheckboxChange = skill => {
@@ -205,21 +224,53 @@ function Form() {
             borderColor={'#bbb'}
             onChange={e => {
               dispatch({ type: e.target.name, payload: e.target.value });
+
+              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              if (!emailRegex.test(e.target.value)) {
+                setErrors(prevErrors => ({
+                  ...prevErrors,
+                  email: 'Please enter a valid email address',
+                }));
+              } else {
+                setErrors(prevErrors => ({ ...prevErrors, email: '' }));
+              }
             }}
             required
           />
+          {errors.email && (
+            <Text color="red.500" fontSize="sm">
+              {errors.email}
+            </Text>
+          )}
         </FormControl>
         <FormControl>
           <Input
             type="number"
             name="phoneNo"
-            placeholder="Enter Phone Number"
-            borderColor={'#bbb'}
+            placeholder="Ex. +918736839401 - Enter Phone Number (including country code)"
+            borderColor={errors.phoneNo ? 'red.500' : '#bbb'}
             onChange={e => {
               dispatch({ type: e.target.name, payload: e.target.value });
+
+              // Validate phone number format
+              const phoneRegex = /^\+[0-9]{1,3}[0-9]{5,14}$/;
+              if (!phoneRegex.test(e.target.value)) {
+                setErrors(prevErrors => ({
+                  ...prevErrors,
+                  phoneNo:
+                    'Please enter a valid phone number with country code (do refer placeholder example)',
+                }));
+              } else {
+                setErrors(prevErrors => ({ ...prevErrors, phoneNo: '' }));
+              }
             }}
             required
           />
+          {errors.phoneNo && (
+            <Text color="red.500" fontSize="sm">
+              {errors.phoneNo}
+            </Text>
+          )}
         </FormControl>
         <Box
           margin="20px auto"
@@ -232,7 +283,7 @@ function Form() {
             💡Select your Skills (Min - 2):
           </Text>
           <Box
-            display={{ base: 'grid', md: 'flex' }}
+            display={{ base: 'grid', lg: 'flex' }}
             gap={6}
             padding={2}
             color="#3a3e48"
@@ -281,7 +332,7 @@ function Form() {
             💬 Select your English Fluency Level:
           </Text>
           <RadioGroup onChange={handleFluencyChange} value={value}>
-            <Stack direction={{ base: 'column', md: 'row' }}>
+            <Stack direction={{ base: 'column', lg: 'row' }}>
               <Radio value="1">Begginer</Radio>
               <Radio value="2">Intermediate</Radio>
 

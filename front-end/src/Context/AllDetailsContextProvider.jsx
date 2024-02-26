@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useRef, useState } from 'react';
 
 export const AllDetails = createContext();
 
@@ -6,6 +6,10 @@ function AllDetailsContextProvider({ children }) {
   const [isTrue, setIsTrue] = useState(false);
   const [userSkills, setUserSkills] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
+
+  const handleMarks = useRef(0);
+  const marksRef = useRef(0);
+  const emailRef = useRef('');
 
   return (
     <AllDetails.Provider
@@ -16,6 +20,9 @@ function AllDetailsContextProvider({ children }) {
         setUserSkills,
         isAdmin,
         setIsAdmin,
+        handleMarks,
+        marksRef,
+        emailRef,
       }}
     >
       {children}

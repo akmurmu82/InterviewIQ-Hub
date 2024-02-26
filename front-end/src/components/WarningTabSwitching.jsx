@@ -12,9 +12,11 @@ import {
 } from '@chakra-ui/react';
 
 import { AllDetails } from '../Context/AllDetailsContextProvider';
+import useTotalMarks from './helper/setTotalMarks';
 
 function WarningMsg({ setActive }) {
   const [isOpen, setIsOpen] = useState(true);
+  const { marksRef } = useTotalMarks();
 
   const { isTrue } = useContext(AllDetails);
 
@@ -64,7 +66,12 @@ function WarningMsg({ setActive }) {
               <Button
                 colorScheme="teal"
                 ml={3}
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  if (isOpen) {
+                    marksRef.current = 0;
+                  }
+                  setIsOpen(false);
+                }}
               >
                 Agree
               </Button>

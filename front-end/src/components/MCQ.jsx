@@ -1,12 +1,17 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Box, Text, Stack, Radio, Button } from '@chakra-ui/react';
+import { AllDetails } from '../Context/AllDetailsContextProvider';
+import useTotalMarks from './helper/setTotalMarks';
 
-function MCQ({ index, question, options, answer }) {
+function MCQ({ index, question, options, answer, active }) {
   const [selectedOption, setSelectedOption] = useState('');
   const [isCorrect, setIsCorrect] = useState(false);
   const [isAnswered, setIsAnswered] = useState(false);
+  const { updateTotalMarks } = useTotalMarks();
 
   const checkAnswerRef = useRef(null);
+
+  let { handleMarks } = useContext(AllDetails);
 
   const handleOptionChange = option => {
     setSelectedOption(option);
@@ -14,8 +19,6 @@ function MCQ({ index, question, options, answer }) {
 
   const handleSubmit = () => {
     setIsCorrect(selectedOption === answer);
-    console.log('selectedOption:', selectedOption);
-    console.log('answer:', answer);
 
     setIsAnswered(true);
   };
@@ -23,6 +26,10 @@ function MCQ({ index, question, options, answer }) {
   useEffect(() => {
     if (isAnswered) {
       checkAnswerRef.current.style.color = isCorrect ? 'teal' : 'red';
+      handleMarks.current = isCorrect ? 1 : 0;
+    }
+    if (selectedOption === answer) {
+      updateTotalMarks();
     }
   }, [isAnswered, isCorrect]);
   return (

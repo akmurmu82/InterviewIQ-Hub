@@ -13,10 +13,12 @@ import {
 
 import { AllDetails } from '../Context/AllDetailsContextProvider';
 
-function Disclaimer() {
+function Disclaimer({ setIsLoading }) {
   const [isOpen, setIsOpen] = useState(true);
 
   const { isTrue } = useContext(AllDetails);
+
+  isOpen ? setIsLoading(true) : setIsLoading(false);
 
   const handleClose = event => {
     // Prevent closing the dialog if the click is inside the dialog content

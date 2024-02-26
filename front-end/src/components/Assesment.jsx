@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-// import questions from './questions';
+import questions from './helper/questions';
 import { AllDetails } from '../Context/AllDetailsContextProvider';
 import Banner from './Banner';
 
@@ -16,8 +16,6 @@ function Assesment() {
 
   const { userSkills, current } = useContext(AllDetails);
 
-  const [questions, setQuestions] = useState([]);
-
   const [active, setActive] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -27,22 +25,22 @@ function Assesment() {
   };
 
   // Fetching the assessment questions from DB
-  const getAssessmentQues = async () => {
-    setIsLoading(true);
+  // const getAssessmentQues = async () => {
+  //   setIsLoading(true);
 
-    try {
-      let res = await fetch(
-        `https://be-interviewiq-hub.onrender.com/guests/assessment`
-      );
-      let data = await res.json();
-      setQuestions(data.data);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //   try {
+  //     let res = await fetch(
+  //       `https://be-interviewiq-hub.onrender.com/guests/assessment`
+  //     );
+  //     let data = await res.json();
+  //     setQuestions(data.data);
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   //filtering the Questions according to users skills
 
@@ -84,12 +82,12 @@ function Assesment() {
   }
 
   useEffect(() => {
-    getAssessmentQues();
+    // getAssessmentQues();
   }, []);
 
   return (
     <Box>
-      <Disclaimer />
+      <Disclaimer setIsLoading={setIsLoading} />
       <Banner />
       {!active ? null : <WarningMsg setActive={setActive} />}
 
@@ -106,7 +104,13 @@ function Assesment() {
       ) : (
         <Box>
           {getFilterSkills.map((que, i) => (
-            <MCQ {...que} key={que.id} index={i} marks={current} />
+            <MCQ
+              {...que}
+              key={que.id}
+              index={i}
+              marks={current}
+              active={active}
+            />
           ))}
         </Box>
       )}

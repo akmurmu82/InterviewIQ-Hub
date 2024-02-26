@@ -43,6 +43,25 @@ function Description() {
         </Text>
         <Text mt={5}>🔥 Group members -</Text>
         <List spacing={3} ml={{ base: 20, md: 20 }}>
+          {/* You can also use custom icons from react-icons */}
+          <Box
+            display={{ base: 'grid', md: 'flex' }}
+            gap={{ base: 1, md: 3 }}
+            mt={2}
+          >
+            <ListItem>
+              <ListIcon as={MdCheckCircle} color="green.500" />
+              Supriya Singh
+            </ListItem>
+            <ListItem>
+              <ListIcon as={MdCheckCircle} color="green.500" />
+              Mahin Malek
+            </ListItem>
+            <ListItem>
+              <ListIcon as={MdCheckCircle} color="green.500" />
+              Kirthika Jayaraman
+            </ListItem>
+          </Box>
           <Box display={{ base: 'grid', md: 'flex' }} gap={{ base: 1, md: 3 }}>
             <ListItem>
               <ListIcon as={MdCheckCircle} color="green.500" />
@@ -55,18 +74,6 @@ function Description() {
             <ListItem>
               <ListIcon as={MdCheckCircle} color="green.500" />
               Karan Chauhan
-            </ListItem>
-          </Box>
-
-          {/* You can also use custom icons from react-icons */}
-          <Box display={{ base: 'grid', md: 'flex' }} gap={{ base: 1, md: 3 }}>
-            <ListItem>
-              <ListIcon as={MdCheckCircle} color="green.500" />
-              Supriya Singh
-            </ListItem>
-            <ListItem>
-              <ListIcon as={MdCheckCircle} color="green.500" />
-              Mahin Malek
             </ListItem>
           </Box>
         </List>

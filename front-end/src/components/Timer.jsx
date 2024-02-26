@@ -5,14 +5,13 @@ function Timer({ handleSubmitAssesment, isLoading }) {
   const [minutes, setMinutes] = useState(4);
   const [seconds, setSeconds] = useState(59);
 
-  let secondsInterval;
-
   useEffect(() => {
+    let secondsInterval;
+
     if (!isLoading) {
       secondsInterval = setInterval(() => {
         if (seconds === 0) {
           setSeconds(59);
-
           setMinutes(prevMinutes => prevMinutes - 1);
         } else {
           setSeconds(prevSeconds => prevSeconds - 1);
@@ -23,11 +22,13 @@ function Timer({ handleSubmitAssesment, isLoading }) {
     return () => {
       clearInterval(secondsInterval);
     };
-  }, [seconds]);
+  }, [isLoading, seconds]);
 
-  if (minutes === 0 && seconds === 0) {
-    handleSubmitAssesment();
-  }
+  useEffect(() => {
+    if (minutes === 0 && seconds === 0) {
+      handleSubmitAssesment();
+    }
+  }, [minutes, seconds, handleSubmitAssesment]);
 
   return (
     <Box>

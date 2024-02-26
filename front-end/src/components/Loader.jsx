@@ -1,6 +1,9 @@
 import { Spinner, Box, Text } from '@chakra-ui/react';
+import { AllDetails } from '../Context/AllDetailsContextProvider';
+import { useContext } from 'react';
 
 function Loader() {
+  const { isAdmin } = useContext(AllDetails);
   return (
     <>
       <Box
@@ -17,7 +20,11 @@ function Loader() {
           size="xl"
         />
       </Box>
-      <Text fontSize={20}>Please Wait...It's just take 2 minutes...</Text>
+      <Text fontSize={20}>
+        {isAdmin
+          ? 'Abey Wait karrr'
+          : "Please Wait...It's just take 2 minutes..."}
+      </Text>
     </>
   );
 }
